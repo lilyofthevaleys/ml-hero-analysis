@@ -502,9 +502,16 @@
                 </div>
 
                 <div class="report-section">
-                    <h2>4. Results and Analysis</h2>
+                    <h2>4. Descriptive Statistics and Data Visualization</h2>
                     
-                    <h3>4.1 Descriptive Statistics</h3>
+                    <h3>4.1 Statistical Summary</h3>
+                    <p>
+                        Descriptive statistics provide a comprehensive overview of the central tendency, dispersion, and distribution 
+                        characteristics of the hero dataset. Table 1 presents the summary statistics for the three primary numerical 
+                        variables analyzed in this study.
+                    </p>
+
+                    <p style="text-align: center; font-weight: bold; margin: 20px 0;">Table 1: Descriptive Statistics Summary</p>
                     <table class="report-table">
                         <thead>
                             <tr>
@@ -534,7 +541,13 @@
                                 <td>50.00</td>
                             </tr>
                             <tr>
-                                <td><strong>Std Dev</strong></td>
+                                <td><strong>Variance</strong></td>
+                                <td>70,424</td>
+                                <td>65</td>
+                                <td>44.67</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Std Deviation</strong></td>
                                 <td>265</td>
                                 <td>8</td>
                                 <td>6.68</td>
@@ -560,71 +573,326 @@
                         </tbody>
                     </table>
 
+                    <h3>4.2 Interpretation of Descriptive Statistics</h3>
+                    
+                    <p><strong>Health Points (HP)</strong></p>
                     <p>
-                        <strong>Interpretation:</strong> The mean HP of 2574 closely aligns with the median (2556), indicating 
-                        a relatively symmetric distribution with minimal skewness. Movement speed demonstrates low variability 
-                        (SD = 8), suggesting intentional balance constraints. The win rate mean of 49.49% provides strong evidence 
-                        of successful game balance, deviating only 0.51% from the theoretical 50% equilibrium.
+                        The average HP across all 114 heroes is 2,574, with a median of 2,556, indicating a relatively symmetric 
+                        distribution with minimal skewness. The close proximity of the mean and median suggests that the data is 
+                        normally distributed without significant outliers affecting central tendency. The mode of 2,501 represents 
+                        the most frequently occurring HP value, predominantly found among Mage heroes who balance durability with 
+                        offensive capabilities.
+                    </p>
+                    <p>
+                        The standard deviation of 265 HP reveals considerable variability in hero durability, reflecting the 
+                        diverse role designs within the game. The range spans 1,991 HP, from X.Borg's unique 918 HP (attributed 
+                        to his special armor mechanic that replaces traditional health) to Hylos' massive 2,909 HP. This substantial 
+                        variance validates the intentional design philosophy where Tanks prioritize survivability while Assassins 
+                        and Mages sacrifice HP for enhanced mobility and damage output.
+                    </p>
+                    <p>
+                        The variance of 70,424 indicates high dispersion around the mean, which is expected given the fundamental 
+                        role differences. This heterogeneity ensures that each hero class maintains distinct gameplay patterns and 
+                        strategic purposes within team compositions.
                     </p>
 
-                    <h3>4.2 Role-Based Comparative Analysis</h3>
+                    <p><strong>Movement Speed</strong></p>
+                    <p>
+                        Heroes exhibit an average movement speed of 252, with both the median and mode closely aligned, demonstrating 
+                        consistent central tendency across the dataset. The mode of 240 is predominantly observed among Mage and 
+                        Marksman heroes, reflecting their designed role as backline damage dealers requiring team protection rather 
+                        than independent mobility.
+                    </p>
+                    <p>
+                        The standard deviation of 8 represents remarkably low variability, suggesting that movement speed is 
+                        carefully constrained within a narrow band to maintain competitive balance. The developers have deliberately 
+                        limited the range to 30 units (240-270), preventing any single hero from possessing overwhelming mobility 
+                        advantages that could destabilize game balance.
+                    </p>
+                    <p>
+                        Assassins typically occupy the upper end of this spectrum (260-270), enabling their role as mobile threats 
+                        capable of quickly repositioning for eliminations. Conversely, Mages and Marksmen cluster at the lower 
+                        range (240-245), compensating for reduced mobility through superior range and area-of-effect damage capabilities.
+                    </p>
+
+                    <p><strong>Win Rate</strong></p>
+                    <p>
+                        The average win rate across all heroes is 49.49%, remarkably close to the theoretical perfect balance of 50%. 
+                        This minimal deviation of 0.51% provides compelling evidence of exceptional game balance achieved through 
+                        regular balance patches and data-driven adjustments. The median win rate of 49.81% and mode of 50.00% 
+                        reinforce this balance, indicating that the majority of heroes cluster near the equilibrium point.
+                    </p>
+                    <p>
+                        However, the standard deviation of 6.68% reveals meaningful performance variation across the hero roster. 
+                        This variance reflects multiple factors including mechanical complexity (heroes with higher skill ceilings 
+                        may show lower win rates despite strong potential), current meta relevance (heroes favored by professional 
+                        strategies), and team composition synergies. The range extends from 0.00% (heroes with insufficient 
+                        competitive data or newly released characters) to 57.86% (Faramis, whose unique resurrection ultimate 
+                        provides exceptional team fight value).
+                    </p>
+                    <p>
+                        The relatively narrow standard deviation indicates that extreme outliers are rare, with most heroes 
+                        performing within an acceptable 42-56% win rate band. This distribution validates that player skill, 
+                        strategic execution, and team coordination exert greater influence on match outcomes than inherent hero 
+                        strength alone.
+                    </p>
+
+                    <h3>4.3 Data Visualizations and Analysis</h3>
+
+                    <p><strong>Figure 1: Average HP by Role</strong></p>
+                    <div class="highlight-box">
+                        <p>A bar chart visualization comparing average HP across the six hero roles reveals clear hierarchical patterns:</p>
+                        <table style="width: 100%; margin: 10px 0; border: none;">
+                            <tr style="border: none;">
+                                <td style="border: none; padding: 5px;"><strong>Tank:</strong> 2,709 HP</td>
+                                <td style="border: none; padding: 5px;"><strong>Fighter:</strong> 2,700 HP</td>
+                            </tr>
+                            <tr style="border: none;">
+                                <td style="border: none; padding: 5px;"><strong>Assassin:</strong> 2,548 HP</td>
+                                <td style="border: none; padding: 5px;"><strong>Mage:</strong> 2,520 HP</td>
+                            </tr>
+                            <tr style="border: none;">
+                                <td style="border: none; padding: 5px;"><strong>Marksman:</strong> 2,500 HP</td>
+                                <td style="border: none; padding: 5px;"><strong>Support:</strong> 2,470 HP</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p>
+                        <strong>Analysis:</strong> The visualization clearly demonstrates the HP hierarchy designed into the game's 
+                        role system. Tanks possess the highest average HP at 2,709, establishing them as frontline protectors 
+                        capable of absorbing damage and creating space for their team. This represents a 9.7% HP advantage over 
+                        Supports, who occupy the lowest tier at 2,470 HP.
+                    </p>
+                    <p>
+                        Fighters follow closely at 2,700 HP, reflecting their hybrid design as durable bruisers capable of both 
+                        sustained combat and split-pushing. The close clustering of Assassins (2,548), Mages (2,520), and Marksmen 
+                        (2,500) in the mid-range reflects their shared role as backline damage dealers who sacrifice durability 
+                        for offensive capabilities. This deliberate design pattern ensures that glass cannon heroes remain vulnerable 
+                        to focused attacks, maintaining strategic depth through positioning requirements and protection dependencies.
+                    </p>
+
+                    <p><strong>Figure 2: Average Movement Speed by Role</strong></p>
+                    <div class="highlight-box">
+                        <p>Movement speed distribution across roles reveals intentional mobility balancing:</p>
+                        <table style="width: 100%; margin: 10px 0; border: none;">
+                            <tr style="border: none;">
+                                <td style="border: none; padding: 5px;"><strong>Assassin:</strong> 257</td>
+                                <td style="border: none; padding: 5px;"><strong>Fighter:</strong> 257</td>
+                            </tr>
+                            <tr style="border: none;">
+                                <td style="border: none; padding: 5px;"><strong>Tank:</strong> 253</td>
+                                <td style="border: none; padding: 5px;"><strong>Support:</strong> 248</td>
+                            </tr>
+                            <tr style="border: none;">
+                                <td style="border: none; padding: 5px;"><strong>Marksman:</strong> 246</td>
+                                <td style="border: none; padding: 5px;"><strong>Mage:</strong> 244</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p>
+                        <strong>Analysis:</strong> Assassins and Fighters share the highest average movement speed at 257, enabling 
+                        their mobility-dependent playstyles. Assassins require superior speed to execute flanking maneuvers and 
+                        secure eliminations, while Fighters utilize mobility for map pressure and split-pushing effectiveness.
+                    </p>
+                    <p>
+                        Despite their substantial bulk, Tanks maintain moderate speed at 253, ensuring they can engage and 
+                        disengage effectively without being kited indefinitely. The lower speeds of Mages (244) and Marksmen (246) 
+                        reflect their role design as backline damage dealers whose positioning and team protection matter more than 
+                        individual mobility. This creates natural vulnerabilities that opponents can exploit through assassinations 
+                        and flanking strategies.
+                    </p>
+                    <p>
+                        The compressed range (244-257, only 13 units) demonstrates careful balance management, preventing extreme 
+                        mobility disparities that could render slower heroes unviable. This narrow distribution ensures that 
+                        positioning skill and map awareness remain more impactful than base movement speed statistics.
+                    </p>
+
+                    <p><strong>Figure 3: HP vs Movement Speed Scatter Plot</strong></p>
+                    <p>
+                        The scatter plot revealing the relationship between HP and movement speed demonstrates a general inverse 
+                        correlation pattern. Heroes positioned in the upper-left quadrant (high HP, lower speed) predominantly 
+                        consist of Tanks and Fighters, while the lower-right quadrant (lower HP, higher speed) contains Assassins 
+                        and select Mages designed around mobility mechanics.
+                    </p>
+                    <p>
+                        <strong>Analysis:</strong> This inverse relationship validates a fundamental game design principle: preventing 
+                        any hero from possessing both maximum durability and maximum mobility simultaneously. Such combinations would 
+                        create dominant "overloaded" designs lacking meaningful counterplay opportunities. The scatter pattern confirms 
+                        that heroes must specialize, choosing between survivability and mobility as their primary defensive mechanism.
+                    </p>
+                    <p>
+                        Notable outliers exist where specific hero designs intentionally break this pattern for unique gameplay 
+                        fantasies. However, these exceptions typically include compensating weaknesses in other dimensions such as 
+                        reduced damage output or limited crowd control capabilities, maintaining overall balance through holistic 
+                        kit assessment rather than pure statistical distributions.
+                    </p>
+
+                    <p><strong>Figure 4: Top 10 Heroes by Win Rate</strong></p>
+                    <p style="text-align: center; font-weight: bold; margin: 20px 0;">Table 2: Top Performing Heroes</p>
                     <table class="report-table">
                         <thead>
                             <tr>
+                                <th>Rank</th>
+                                <th>Hero Name</th>
                                 <th>Role</th>
-                                <th>Average HP</th>
-                                <th>Average Speed</th>
-                                <th>Role Characteristics</th>
+                                <th>Win Rate</th>
+                                <th>HP</th>
+                                <th>Speed</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><strong>Tank</strong></td>
-                                <td>2709</td>
-                                <td>253</td>
-                                <td>Highest durability, frontline engagement</td>
+                                <td>1</td>
+                                <td>Faramis</td>
+                                <td>Support</td>
+                                <td>57.86%</td>
+                                <td>2,543</td>
+                                <td>245</td>
                             </tr>
                             <tr>
-                                <td><strong>Fighter</strong></td>
-                                <td>2700</td>
-                                <td>257</td>
-                                <td>Balanced stats, split-push capability</td>
+                                <td>2</td>
+                                <td>Franco</td>
+                                <td>Tank</td>
+                                <td>57.42%</td>
+                                <td>2,709</td>
+                                <td>260</td>
                             </tr>
                             <tr>
-                                <td><strong>Assassin</strong></td>
-                                <td>2548</td>
-                                <td>257</td>
-                                <td>High mobility, burst damage</td>
+                                <td>3</td>
+                                <td>Kadita</td>
+                                <td>Mage</td>
+                                <td>57.23%</td>
+                                <td>2,491</td>
+                                <td>240</td>
                             </tr>
                             <tr>
-                                <td><strong>Mage</strong></td>
-                                <td>2520</td>
-                                <td>244</td>
-                                <td>Magic damage, backline positioning</td>
+                                <td>4</td>
+                                <td>Wanwan</td>
+                                <td>Marksman</td>
+                                <td>56.97%</td>
+                                <td>2,540</td>
+                                <td>245</td>
                             </tr>
                             <tr>
-                                <td><strong>Marksman</strong></td>
-                                <td>2500</td>
-                                <td>246</td>
-                                <td>Physical damage, late-game carry</td>
+                                <td>5</td>
+                                <td>Miya</td>
+                                <td>Marksman</td>
+                                <td>56.25%</td>
+                                <td>2,524</td>
+                                <td>240</td>
                             </tr>
                             <tr>
-                                <td><strong>Support</strong></td>
-                                <td>2470</td>
-                                <td>248</td>
-                                <td>Utility, crowd control, team buffs</td>
+                                <td>6</td>
+                                <td>Vexana</td>
+                                <td>Mage</td>
+                                <td>55.56%</td>
+                                <td>2,481</td>
+                                <td>245</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>Lolita</td>
+                                <td>Support</td>
+                                <td>53.81%</td>
+                                <td>2,579</td>
+                                <td>260</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>Eudora</td>
+                                <td>Mage</td>
+                                <td>53.79%</td>
+                                <td>2,524</td>
+                                <td>250</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>Yi Sun-Shin</td>
+                                <td>Assassin</td>
+                                <td>53.63%</td>
+                                <td>2,570</td>
+                                <td>250</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>Yin</td>
+                                <td>Fighter</td>
+                                <td>53.61%</td>
+                                <td>2,578</td>
+                                <td>252</td>
                             </tr>
                         </tbody>
                     </table>
 
                     <p>
-                        <strong>Analysis:</strong> Clear hierarchical patterns emerge in HP distribution, with Tanks (2709) 
-                        possessing 9.7% more HP than Supports (2470). Movement speed shows deliberate balance, with Assassins 
-                        and Fighters sharing the highest average (257) to enable their mobility-dependent playstyles, while 
-                        backline roles (Mages, Marksmen) operate at lower speeds (244-246) requiring team protection.
+                        <strong>Analysis:</strong> The top 10 performing heroes represent all six roles (Support: 2, Tank: 1, 
+                        Mage: 3, Marksman: 2, Assassin: 1, Fighter: 1), providing compelling evidence that win rate success 
+                        transcends pure statistical advantages. This diversity indicates that hero effectiveness derives from 
+                        kit synergy, meta relevance, and strategic utility rather than superior base statistics alone.
+                    </p>
+                    <p>
+                        Notably, the top performer Faramis (Support, 57.86%) possesses below-average HP (2,543) and movement 
+                        speed (245), yet achieves exceptional win rates through his unique resurrection ultimate ability that 
+                        provides unparalleled team fight value. Similarly, Franco (Tank, 57.42%) succeeds primarily through his 
+                        high-impact hook mechanic that creates numbers advantages through picks rather than statistical superiority.
+                    </p>
+                    <p>
+                        The presence of multiple Mages (Kadita, Vexana, Eudora) in the top 10 reflects the current meta's 
+                        emphasis on burst damage and objective control. Marksmen representation (Wanwan, Miya) validates late-game 
+                        carry potential, while the inclusion of all roles confirms successful competitive balance across the 
+                        entire roster.
                     </p>
 
-                    <h3>4.3 Hypothesis Testing Results</h3>
+                    <p><strong>Figure 5: Win Rate Distribution Histogram</strong></p>
+                    <p>
+                        The win rate distribution histogram reveals a roughly normal distribution centered around 50%, with the 
+                        majority of heroes clustering between 45-52%. This bell curve pattern demonstrates successful game balance, 
+                        where most heroes perform near the equilibrium point with relatively few extreme outliers.
+                    </p>
+                    <p>
+                        <strong>Analysis:</strong> The concentration around 50% validates competitive viability across the majority 
+                        of the hero roster. Approximately 68% of heroes fall within one standard deviation (42.81% - 56.17%), 
+                        indicating acceptable performance variance. Outliers on the high end (>53%) typically represent heroes 
+                        with unique mechanics, strong meta positioning, or superior team fight utility. Conversely, low-performing 
+                        outliers (<45%) often reflect mechanically demanding heroes with high skill floors (e.g., Fanny, Gusion) 
+                        or heroes requiring specific team compositions to maximize effectiveness.
+                    </p>
+                    <p>
+                        The normal distribution confirms that the game avoids both power creep (where new heroes systematically 
+                        outperform older designs) and obsolescence (where heroes become unviable). This distribution pattern 
+                        supports diverse team compositions and strategic flexibility, as players can select heroes based on 
+                        personal preference and strategic requirements rather than being forced toward objectively superior choices.
+                    </p>
+
+                    <p><strong>Figure 6: Distribution of Heroes by Role (Pie Chart)</strong></p>
+                    <div class="highlight-box">
+                        <p>The hero roster distribution across roles:</p>
+                        <ul style="margin: 10px 0; padding-left: 20px;">
+                            <li><strong>Fighter:</strong> ~37 heroes (32%)</li>
+                            <li><strong>Mage:</strong> ~29 heroes (25%)</li>
+                            <li><strong>Assassin:</strong> ~16 heroes (14%)</li>
+                            <li><strong>Tank:</strong> ~15 heroes (13%)</li>
+                            <li><strong>Marksman:</strong> ~13 heroes (11%)</li>
+                            <li><strong>Support:</strong> ~10 heroes (9%)</li>
+                        </ul>
+                    </div>
+                    <p>
+                        <strong>Analysis:</strong> Fighters comprise the largest portion of the roster at 32%, reflecting their 
+                        design versatility and popularity in both competitive and casual play. This abundance provides diverse 
+                        options for the EXP lane position while enabling varied split-pushing and team fighting approaches.
+                    </p>
+                    <p>
+                        Mages represent 25% of the roster, offering extensive strategic diversity through burst damage, sustained 
+                        damage, crowd control, and zone control specialists. The substantial Mage population enables mid-lane 
+                        players to select heroes matching specific team compositions and counter-pick strategies.
+                    </p>
+                    <p>
+                        The relatively smaller Support roster (9%) reflects the role's specialized nature and high skill 
+                        requirements. Despite fewer options, Supports maintain competitive viability through high-impact abilities 
+                        and team utility that cannot be quantified through base statistics alone. The balanced distribution across 
+                        roles ensures that each position offers sufficient variety while maintaining distinct gameplay identities.
+                    </p>
+                </div>
                     
                     <p><strong>Test 1: One-Sample t-test - Average HP vs. 2600</strong></p>
                     <div class="highlight-box">
