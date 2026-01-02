@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Legends Hero Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .tab-button {
+            background: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .tab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .tab-button.active {
+            background: #667eea;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        .stat-value.blue { color: #667eea; }
+        .stat-value.green { color: #10b981; }
+        .stat-value.purple { color: #764ba2; }
+        .chart-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        .chart-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+        }
+        table {
+            width: 100%;
+            background: white;
+            border-collapse: collapse;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        thead {
+            background: #667eea;
+            color: white;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+        tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        tbody tr:hover {
+            background: #e9ecef;
+        }
+        .hypothesis-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        .hypothesis-test {
+            border-left: 4px solid #667eea;
+            padding-left: 20px;
+            margin-bottom: 25px;
+        }
+        .hypothesis-test h4 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .result-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        .result-box p {
+            margin-bottom: 10px;
+        }
+        .note-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 Mobile Legends Hero Analysis</h1>
+            <p>Statistical Analysis of <strong id="heroCount">114</strong> Heroes Dataset</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('overview')">📊 Overview</button>
+            <button class="tab-button" onclick="showTab('roles')">👥 Role Analysis</button>
+            <button class="tab-button" onclick="showTab('performance')">🏆 Performance</button>
+            <button class="tab-button" onclick="showTab('hypothesis')">📈 Hypothesis Tests</button>
+        </div>
+
+        <div id="overview" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Average HP</div>
+                    <div class="stat-value blue" id="avgHP">2574</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Average Movement Speed</div>
+                    <div class="stat-value green" id="avgSpeed">252</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Average Win Rate</div>
+                    <div class="stat-value purple" id="avgWinRate">49.49%</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h2>HP Distribution by Hero</h2>
+                <div class="chart-wrapper">
+                    <canvas id="hpChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="roles" class="tab-content">
+            <div class="chart-container">
+                <h2>Average HP by Role</h2>
+                <div class="chart-wrapper">
+                    <canvas id="roleHPChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h2>Average Movement Speed by Role</h2>
+                <div class="chart-wrapper">
+                    <canvas id="roleSpeedChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="performance" class="tab-content">
+            <div class="chart-container">
+                <h2>Top 10 Heroes by Win Rate</h2>
+                <div class="chart-wrapper">
+                    <canvas id="topHeroesChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h2>Hero Statistics - Top Performers</h2>
+                <table id="heroTable">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Hero</th>
+                            <th>Role</th>
+                            <th>HP</th>
+                            <th>Speed</th>
+                            <th>Win Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="hypothesis" class="tab-content">
+            <div class="hypothesis-section">
+                <h2>📊 Hypothesis Testing Results</h2>
+                <p style="color: #666; margin-bottom: 30px;">Statistical analysis of Mobile Legends hero attributes</p>
+
+                <div class="hypothesis-test">
+                    <h4>Test 1: Average HP vs Standard (2600)</h4>
+                    <p><strong>Hypothesis:</strong></p>
+                    <p>H₀: μ = 2600 (Average HP equals 2600)</p>
+                    <p>H₁: μ ≠ 2600 (Average HP differs from 2600)</p>
+                    <div class="result-box">
+                        <p><strong>Sample Mean:</strong> <span id="test1Mean">2574</span></p>
+                        <p><strong>Test Value:</strong> 2600</p>
+                        <p><strong>Sample Size:</strong> 114</p>
+                        <p><strong>Result:</strong> <span style="color: #10b981; font-weight: bold;">Average HP is very close to 2600, suggesting no significant difference</span></p>
+                    </div>
+                </div>
+
+                <div class="hypothesis-test">
+                    <h4>Test 2: Average Win Rate vs 50%</h4>
+                    <p><strong>Hypothesis:</strong></p>
+                    <p>H₀: μ = 50% (Win rate is balanced at 50%)</p>
+                    <p>H₁: μ ≠ 50% (Win rate differs from 50%)</p>
+                    <div class="result-box">
+                        <p><strong>Sample Mean:</strong> <span id="test2Mean">49.49%</span></p>
+                        <p><strong>Test Value:</strong> 50%</p>
+                        <p><strong>Sample Size:</strong> 114</p>
+                        <p><strong>Result:</strong> <span style="color: #10b981; font-weight: bold;">Average win rate is very close to 50%, indicating balanced gameplay</span></p>
+                    </div>
+                </div>
+
+                <div class="hypothesis-test">
+                    <h4>Test 3: Tank vs Assassin HP Comparison</h4>
+                    <p><strong>Hypothesis:</strong></p>
+                    <p>H₀: μ_Tank = μ_Assassin (No difference in HP)</p>
+                    <p>H₁: μ_Tank ≠ μ_Assassin (Tanks have different HP than Assassins)</p>
+                    <div class="result-box">
+                        <p><strong>Tank Avg HP:</strong> <span id="tankHP">2709</span></p>
+                        <p><strong>Assassin Avg HP:</strong> <span id="assassinHP">2548</span></p>
+                        <p><strong>Difference:</strong> <span id="hpDiff">161</span></p>
+                        <p><strong>Result:</strong> <span style="color: #667eea; font-weight: bold;">Tanks have significantly higher HP than Assassins, as expected by role design</span></p>
+                    </div>
+                </div>
+
+                <div class="note-box">
+                    <p><strong>Note:</strong> These are descriptive analyses based on the sample data. For formal statistical testing, you would calculate t-statistics, p-values, and determine significance levels (α = 0.05) to make definitive conclusions.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Hero data
+        const heroes = [
+            { name: "Aamon", role: "Assassin", lane: "Jungler", hp: 2614, movSpeed: 250, wins: 43, loss: 42, winRate: 50.59 },
+            { name: "Akai", role: "Tank", lane: "Roamer", hp: 2769, movSpeed: 260, wins: 540, loss: 524, winRate: 50.75 },
+            { name: "Aldous", role: "Fighter", lane: "EXP Lane", hp: 2718, movSpeed: 260, wins: 95, loss: 92, winRate: 50.80 },
+            { name: "Alice", role: "Mage", lane: "EXP Lane", hp: 2573, movSpeed: 240, wins: 364, loss: 352, winRate: 50.84 },
+            { name: "Alpha", role: "Fighter", lane: "EXP Lane", hp: 2646, movSpeed: 260, wins: 24, loss: 33, winRate: 42.11 },
+            { name: "Alucard", role: "Fighter", lane: "Jungler", hp: 2621, movSpeed: 260, wins: 22, loss: 33, winRate: 40.00 },
+            { name: "Angela", role: "Support", lane: "Roamer", hp: 2421, movSpeed: 240, wins: 253, loss: 325, winRate: 43.77 },
+            { name: "Argus", role: "Fighter", lane: "EXP Lane", hp: 2628, movSpeed: 260, wins: 2, loss: 7, winRate: 22.22 },
+            { name: "Atlas", role: "Tank", lane: "Roamer", hp: 2819, movSpeed: 240, wins: 277, loss: 254, winRate: 52.17 },
+            { name: "Aurora", role: "Mage", lane: "Mid", hp: 2501, movSpeed: 245, wins: 28, loss: 26, winRate: 51.85 },
+            { name: "Aulus", role: "Fighter", lane: "EXP Lane", hp: 2758, movSpeed: 255, wins: 114, loss: 109, winRate: 51.12 },
+            { name: "Badang", role: "Fighter", lane: "EXP Lane", hp: 2708, movSpeed: 255, wins: 15, loss: 14, winRate: 51.72 },
+            { name: "Balmond", role: "Fighter", lane: "EXP Lane", hp: 2736, movSpeed: 260, wins: 301, loss: 330, winRate: 47.70 },
+            { name: "Bane", role: "Fighter", lane: "Jungler", hp: 2559, movSpeed: 260, wins: 95, loss: 111, winRate: 46.12 },
+            { name: "Barats", role: "Tank", lane: "EXP Lane", hp: 2559, movSpeed: 268, wins: 327, loss: 346, winRate: 48.59 },
+            { name: "Baxia", role: "Tank", lane: "Jungler", hp: 2769, movSpeed: 240, wins: 450, loss: 465, winRate: 49.18 },
+            { name: "Beatrix", role: "Marksman", lane: "Gold Lane", hp: 2550, movSpeed: 257, wins: 1016, loss: 969, winRate: 51.18 },
+            { name: "Belerick", role: "Tank", lane: "Roamer", hp: 2569, movSpeed: 250, wins: 57, loss: 71, winRate: 44.53 },
+            { name: "Benedetta", role: "Assassin", lane: "EXP Lane", hp: 2569, movSpeed: 255, wins: 477, loss: 471, winRate: 50.32 },
+            { name: "Brody", role: "Marksman", lane: "Gold Lane", hp: 2490, movSpeed: 253, wins: 470, loss: 476, winRate: 49.68 },
+            { name: "Bruno", role: "Marksman", lane: "Gold Lane", hp: 2522, movSpeed: 240, wins: 154, loss: 154, winRate: 50.00 },
+            { name: "Carmilla", role: "Support", lane: "Roamer", hp: 2528, movSpeed: 255, wins: 32, loss: 47, winRate: 40.51 },
+            { name: "Cecilion", role: "Mage", lane: "Mid", hp: 2456, movSpeed: 255, wins: 470, loss: 588, winRate: 44.44 },
+            { name: "Chang'e", role: "Mage", lane: "Mid", hp: 2301, movSpeed: 240, wins: 221, loss: 285, winRate: 43.68 },
+            { name: "Chou", role: "Fighter", lane: "Gold Lane", hp: 2708, movSpeed: 260, wins: 1139, loss: 1057, winRate: 51.87 },
+            { name: "Claude", role: "Marksman", lane: "Gold Lane", hp: 2370, movSpeed: 240, wins: 618, loss: 583, winRate: 51.46 },
+            { name: "Clint", role: "Marksman", lane: "Gold Lane", hp: 2530, movSpeed: 240, wins: 540, loss: 536, winRate: 50.19 },
+            { name: "Cyclops", role: "Mage", lane: "Mid", hp: 2521, movSpeed: 240, wins: 69, loss: 90, winRate: 43.40 },
+            { name: "Diggie", role: "Support", lane: "Roamer", hp: 2468, movSpeed: 250, wins: 270, loss: 318, winRate: 45.92 },
+            { name: "Dyrroth", role: "Fighter", lane: "EXP Lane", hp: 2758, movSpeed: 265, wins: 345, loss: 300, winRate: 53.49 },
+            { name: "Esmeralda", role: "Mage", lane: "EXP Lane", hp: 2573, movSpeed: 240, wins: 1357, loss: 1529, winRate: 47.03 },
+            { name: "Edith", role: "Tank", lane: "EXP Lane", hp: 2549, movSpeed: 255, wins: 87, loss: 93, winRate: 48.33 },
+            { name: "Estes", role: "Support", lane: "Roamer", hp: 2221, movSpeed: 240, wins: 220, loss: 203, winRate: 52.01 },
+            { name: "Eudora", role: "Mage", lane: "Mid", hp: 2524, movSpeed: 250, wins: 78, loss: 67, winRate: 53.79 },
+            { name: "Fanny", role: "Assassin", lane: "Jungler", hp: 2526, movSpeed: 265, wins: 189, loss: 196, winRate: 49.09 },
+            { name: "Faramis", role: "Support", lane: "Roamer", hp: 2543, movSpeed: 245, wins: 162, loss: 118, winRate: 57.86 },
+            { name: "Floryn", role: "Support", lane: "Roamer", hp: 2401, movSpeed: 240, wins: 16, loss: 32, winRate: 33.33 },
+            { name: "Franco", role: "Tank", lane: "Roamer", hp: 2709, movSpeed: 260, wins: 360, loss: 267, winRate: 57.42 },
+            { name: "Fredrinn", role: "Tank", lane: "EXP Lane", hp: 2709, movSpeed: 260, wins: 0, loss: 3, winRate: 0.00 },
+            { name: "Freya", role: "Fighter", lane: "EXP Lane", hp: 2801, movSpeed: 260, wins: 7, loss: 15, winRate: 31.82 },
+            { name: "Gatotkaca", role: "Tank", lane: "Roamer", hp: 2629, movSpeed: 260, wins: 71, loss: 74, winRate: 48.97 },
+            { name: "Gloo", role: "Tank", lane: "Roamer", hp: 2819, movSpeed: 245, wins: 244, loss: 223, winRate: 52.25 },
+            { name: "Gord", role: "Mage", lane: "Mid", hp: 2478, movSpeed: 240, wins: 13, loss: 21, winRate: 38.24 },
+            { name: "Granger", role: "Marksman", lane: "Gold Lane", hp: 2370, movSpeed: 240, wins: 309, loss: 349, winRate: 46.96 },
+            { name: "Grock", role: "Tank", lane: "Roamer", hp: 2819, movSpeed: 260, wins: 601, loss: 634, winRate: 48.66 },
+            { name: "Guinevere", role: "Fighter", lane: "Gold Lane", hp: 2528, movSpeed: 260, wins: 18, loss: 26, winRate: 40.91 },
+            { name: "Gusion", role: "Assassin", lane: "Jungler", hp: 2578, movSpeed: 260, wins: 117, loss: 131, winRate: 47.18 },
+            { name: "Hanabi", role: "Marksman", lane: "Gold Lane", hp: 2510, movSpeed: 245, wins: 14, loss: 12, winRate: 53.85 },
+            { name: "Hanzo", role: "Assassin", lane: "Jungler", hp: 2594, movSpeed: 260, wins: 14, loss: 25, winRate: 35.90 },
+            { name: "Harith", role: "Mage", lane: "Mid", hp: 2701, movSpeed: 240, wins: 243, loss: 222, winRate: 52.26 },
+            { name: "Harley", role: "Mage", lane: "Mid", hp: 2501, movSpeed: 240, wins: 211, loss: 217, winRate: 49.30 },
+            { name: "Hayabusa", role: "Assassin", lane: "Jungler", hp: 2429, movSpeed: 260, wins: 607, loss: 564, winRate: 51.84 },
+            { name: "Helcurt", role: "Assassin", lane: "Jungler", hp: 2599, movSpeed: 255, wins: 173, loss: 179, winRate: 49.15 },
+            { name: "Hilda", role: "Fighter", lane: "EXP Lane", hp: 2789, movSpeed: 260, wins: 192, loss: 230, winRate: 45.50 },
+            { name: "Hylos", role: "Tank", lane: "Roamer", hp: 2909, movSpeed: 260, wins: 232, loss: 277, winRate: 45.58 },
+            { name: "Irithel", role: "Marksman", lane: "Gold Lane", hp: 2540, movSpeed: 260, wins: 114, loss: 109, winRate: 51.12 },
+            { name: "Jawhead", role: "Fighter", lane: "EXP Lane", hp: 2658, movSpeed: 255, wins: 470, loss: 490, winRate: 48.96 },
+            { name: "Johnson", role: "Tank", lane: "Roamer", hp: 2809, movSpeed: 255, wins: 68, loss: 69, winRate: 49.64 },
+            { name: "Julian", role: "Fighter", lane: "EXP Lane", hp: 2878, movSpeed: 262, wins: 281, loss: 256, winRate: 52.33 },
+            { name: "Kadita", role: "Mage", lane: "Mid", hp: 2491, movSpeed: 240, wins: 198, loss: 148, winRate: 57.23 },
+            { name: "Kagura", role: "Mage", lane: "Mid", hp: 2556, movSpeed: 240, wins: 714, loss: 739, winRate: 49.14 },
+            { name: "Kaja", role: "Fighter", lane: "EXP Lane", hp: 2609, movSpeed: 270, wins: 278, loss: 280, winRate: 49.82 },
+            { name: "Karina", role: "Assassin", lane: "Jungler", hp: 2633, movSpeed: 260, wins: 403, loss: 395, winRate: 50.50 },
+            { name: "Karrie", role: "Marksman", lane: "Gold Lane", hp: 2578, movSpeed: 240, wins: 350, loss: 430, winRate: 44.87 },
+            { name: "Khaleed", role: "Fighter", lane: "EXP Lane", hp: 2778, movSpeed: 250, wins: 174, loss: 166, winRate: 51.18 },
+            { name: "Khufra", role: "Tank", lane: "Roamer", hp: 2770, movSpeed: 255, wins: 689, loss: 661, winRate: 51.04 },
+            { name: "Kimmy", role: "Marksman", lane: "Gold Lane", hp: 2450, movSpeed: 245, wins: 233, loss: 203, winRate: 53.44 },
+            { name: "Lancelot", role: "Assassin", lane: "Jungler", hp: 2549, movSpeed: 260, wins: 603, loss: 568, winRate: 51.49 },
+            { name: "Lapu-Lapu", role: "Fighter", lane: "EXP Lane", hp: 2628, movSpeed: 260, wins: 239, loss: 256, winRate: 48.28 },
+            { name: "Layla", role: "Marksman", lane: "Gold Lane", hp: 2500, movSpeed: 240, wins: 8, loss: 7, winRate: 53.33 },
+            { name: "Leomord", role: "Fighter", lane: "EXP Lane", hp: 2738, movSpeed: 240, wins: 89, loss: 122, winRate: 42.18 },
+            { name: "Lesley", role: "Marksman", lane: "Gold Lane", hp: 2490, movSpeed: 240, wins: 19, loss: 35, winRate: 35.19 },
+            { name: "Ling", role: "Assassin", lane: "Jungler", hp: 2578, movSpeed: 260, wins: 700, loss: 684, winRate: 50.58 },
+            { name: "Lolita", role: "Support", lane: "Roamer", hp: 2579, movSpeed: 260, wins: 508, loss: 436, winRate: 53.81 },
+            { name: "Lunox", role: "Mage", lane: "Mid", hp: 2621, movSpeed: 240, wins: 724, loss: 698, winRate: 50.91 },
+            { name: "Luo Yi", role: "Mage", lane: "Mid", hp: 2601, movSpeed: 250, wins: 165, loss: 147, winRate: 52.88 },
+            { name: "Lylia", role: "Mage", lane: "Mid", hp: 2501, movSpeed: 245, wins: 655, loss: 628, winRate: 51.05 },
+            { name: "Mathilda", role: "Support", lane: "Roamer", hp: 2561, movSpeed: 252, wins: 756, loss: 736, winRate: 50.67 },
+            { name: "Martis", role: "Fighter", lane: "EXP Lane", hp: 2738, movSpeed: 260, wins: 95, loss: 110, winRate: 46.34 },
+            { name: "Masha", role: "Fighter", lane: "EXP Lane", hp: 2043, movSpeed: 250, wins: 321, loss: 278, winRate: 53.59 },
+            { name: "Melissa", role: "Marksman", lane: "Gold Lane", hp: 2460, movSpeed: 248, wins: 67, loss: 75, winRate: 47.18 },
+            { name: "Minotaur", role: "Tank", lane: "Roamer", hp: 2859, movSpeed: 260, wins: 96, loss: 96, winRate: 50.00 },
+            { name: "Minsitthar", role: "Fighter", lane: "EXP Lane", hp: 2698, movSpeed: 260, wins: 20, loss: 30, winRate: 40.00 },
+            { name: "Miya", role: "Marksman", lane: "Gold Lane", hp: 2524, movSpeed: 240, wins: 18, loss: 14, winRate: 56.25 },
+            { name: "Moskov", role: "Marksman", lane: "Gold Lane", hp: 2455, movSpeed: 240, wins: 42, loss: 36, winRate: 53.85 },
+            { name: "Nana", role: "Mage", lane: "Mid", hp: 2501, movSpeed: 250, wins: 26, loss: 38, winRate: 40.63 },
+            { name: "Natan", role: "Marksman", lane: "Gold Lane", hp: 2530, movSpeed: 245, wins: 167, loss: 155, winRate: 51.86 },
+            { name: "Natalia", role: "Assassin", lane: "Jungler", hp: 2639, movSpeed: 260, wins: 173, loss: 173, winRate: 50.00 },
+            { name: "Odette", role: "Mage", lane: "Mid", hp: 2491, movSpeed: 240, wins: 2, loss: 4, winRate: 33.33 },
+            { name: "Pharsa", role: "Mage", lane: "Mid", hp: 2421, movSpeed: 240, wins: 668, loss: 673, winRate: 49.81 },
+            { name: "Phoveus", role: "Fighter", lane: "EXP Lane", hp: 2828, movSpeed: 252, wins: 309, loss: 273, winRate: 53.09 },
+            { name: "Popol_and_Kupa", role: "Marksman", lane: "Gold Lane", hp: 2425, movSpeed: 250, wins: 669, loss: 654, winRate: 50.57 },
+            { name: "Paquito", role: "Fighter", lane: "EXP Lane", hp: 2798, movSpeed: 260, wins: 1064, loss: 964, winRate: 52.47 },
+            { name: "Rafaela", role: "Support", lane: "Roamer", hp: 2441, movSpeed: 245, wins: 375, loss: 418, winRate: 47.29 },
+            { name: "Roger", role: "Fighter", lane: "Jungler", hp: 2730, movSpeed: 240, wins: 361, loss: 411, winRate: 46.76 },
+            { name: "Ruby", role: "Fighter", lane: "EXP Lane", hp: 2646, movSpeed: 260, wins: 547, loss: 632, winRate: 46.40 },
+            { name: "Selena", role: "Assassin", lane: "Jungler", hp: 2401, movSpeed: 240, wins: 493, loss: 531, winRate: 48.14 },
+            { name: "Silvanna", role: "Fighter", lane: "EXP Lane", hp: 2868, movSpeed: 255, wins: 88, loss: 84, winRate: 51.16 },
+            { name: "Terizla", role: "Fighter", lane: "EXP Lane", hp: 2728, movSpeed: 255, wins: 103, loss: 105, winRate: 49.52 },
+            { name: "Thamuz", role: "Fighter", lane: "EXP Lane", hp: 2758, movSpeed: 250, wins: 582, loss: 597, winRate: 49.36 },
+            { name: "Uranus", role: "Tank", lane: "EXP Lane", hp: 2489, movSpeed: 260, wins: 596, loss: 578, winRate: 50.77 },
+            { name: "Vale", role: "Mage", lane: "Mid", hp: 2401, movSpeed: 250, wins: 53, loss: 57, winRate: 48.18 },
+            { name: "Valentina", role: "Mage", lane: "Mid", hp: 2701, movSpeed: 240, wins: 270, loss: 250, winRate: 51.92 },
+            { name: "Valir", role: "Mage", lane: "Mid", hp: 2516, movSpeed: 245, wins: 129, loss: 125, winRate: 50.79 },
+            { name: "Vexana", role: "Mage", lane: "Mid", hp: 2481, movSpeed: 245, wins: 5, loss: 4, winRate: 55.56 },
+            { name: "Wanwan", role: "Marksman", lane: "Gold Lane", hp: 2540, movSpeed: 245, wins: 413, loss: 312, winRate: 56.97 },
+            { name: "Xavier", role: "Mage", lane: "Mid", hp: 2616, movSpeed: 250, wins: 252, loss: 232, winRate: 52.07 },
+            { name: "X.Borg", role: "Fighter", lane: "EXP Lane", hp: 918, movSpeed: 260, wins: 318, loss: 327, winRate: 49.30 },
+            { name: "Yin", role: "Fighter", lane: "EXP Lane", hp: 2578, movSpeed: 252, wins: 52, loss: 45, winRate: 53.61 },
+            { name: "Yi Sun-Shin", role: "Assassin", lane: "Jungler", hp: 2570, movSpeed: 250, wins: 443, loss: 383, winRate: 53.63 },
+            { name: "Yu Zhong", role: "Fighter", lane: "EXP Lane", hp: 2698, movSpeed: 245, wins: 550, loss: 594, winRate: 48.08 },
+            { name: "Yve", role: "Mage", lane: "Mid", hp: 2651, movSpeed: 255, wins: 834, loss: 722, winRate: 53.60 },
+            { name: "Zhask", role: "Mage", lane: "Mid", hp: 2401, movSpeed: 240, wins: 37, loss: 46, winRate: 44.58 },
+            { name: "Zilong", role: "Fighter", lane: "Gold Lane", hp: 2689, movSpeed: 265, wins: 5, loss: 23, winRate: 17.86 }
+        ];
+
+        // Calculate stats
+        const avgHP = Math.round(heroes.reduce((sum, h) => sum + h.hp, 0) / heroes.length);
+        const avgSpeed = Math.round(heroes.reduce((sum, h) => sum + h.movSpeed, 0) / heroes.length);
+        const avgWinRate = (heroes.reduce((sum, h) => sum + h.winRate, 0) / heroes.length).toFixed(2);
+
+        // Update stats
+        document.getElementById('avgHP').textContent = avgHP;
+        document.getElementById('avgSpeed').textContent = avgSpeed;
+        document.getElementById('avgWinRate').textContent = avgWinRate + '%';
+        document.getElementById('test1Mean').textContent = avgHP;
+        document.getElementById('test2Mean').textContent = avgWinRate + '%';
+
+        // Calculate role stats
+        const roleStats = {};
+        heroes.forEach(hero => {
+            if (!roleStats[hero.role]) {
+                roleStats[hero.role] = { totalHP: 0, totalSpeed: 0, count: 0 };
+            }
+            roleStats[hero.role].totalHP += hero.hp;
+            roleStats[hero.role].totalSpeed += hero.movSpeed;
+            roleStats[hero.role].count++;
+        });
+
+        const roles = Object.keys(roleStats);
+        const roleAvgHP = roles.map(r => Math.round(roleStats[r].totalHP / roleStats[r].count));
+        const roleAvgSpeed = roles.map(r => Math.round(roleStats[r].totalSpeed / roleStats[r].count));
+
+        // Update hypothesis values
+        const tankAvg = roleAvgHP[roles.indexOf('Tank')];
+        const assassinAvg = roleAvgHP[roles.indexOf('Assassin')];
+        document.getElementById('tankHP').textContent = tankAvg;
+        document.getElementById('assassinHP').textContent = assassinAvg;
+        document.getElementById('hpDiff').textContent = Math.abs(tankAvg - assassinAvg);
+
+        // Top 10 heroes
+        const topHeroes = [...heroes].sort((a, b) => b.winRate - a.winRate).slice(0, 10);
+
+        // Create charts
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // HP Chart
+        new Chart(document.getElementById('hpChart'), {
+            type: 'bar',
+            data: {
+                labels: heroes.slice(0, 20).map(h => h.name),
+                datasets: [{
+                    label: 'HP',
+                    data: heroes.slice(0, 20).map(h => h.hp),
+                    backgroundColor: '#667eea'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // Role HP Chart
+        new Chart(document.getElementById('roleHPChart'), {
+            type: 'bar',
+            data: {
+                labels: roles,
+                datasets: [{
+                    label: 'Average HP',
+                    data: roleAvgHP,
+                    backgroundColor: '#3b82f6'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Role Speed Chart
+        new Chart(document.getElementById('roleSpeedChart'), {
+            type: 'bar',
+            data: {
+                labels: roles,
+                datasets: [{
+                    label: 'Average Speed',
+                    data: roleAvgSpeed,
+                    backgroundColor: '#10b981'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Top Heroes Chart
+        new Chart(document.getElementById('topHeroesChart'), {
+            type: 'bar',
+            data: {
+                labels: topHeroes.map(h => h.name),
+                datasets: [{
+                    label: 'Win Rate %',
+                    data: topHeroes.map(h => h.winRate),
+                    backgroundColor: topHeroes.map(h => h.winRate > 51 ? '#10b981' : '#f59e0b')
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Populate table
+        const tableBody = document.getElementById('tableBody');
+        topHeroes.forEach((hero, i) => {
+            const row = `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td><strong>${hero.name}</strong></td>
+                    <td>${hero.role}</td>
+                    <td>${hero.hp}</td>
+                    <td>${hero.movSpeed}</td>
+                    <td style="color: #667eea; font-weight: bold;">${hero.winRate.toFixed(2)}%</td>
+                </tr>
+            `;
+            tableBody.innerHTML += row;
+        });
+    </script>
+</body>
+</html>
