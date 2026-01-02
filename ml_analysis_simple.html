@@ -241,6 +241,31 @@
                     <tbody id="tableBody"></tbody>
                 </table>
             </div>
+
+            <div class="chart-container">
+                <h2>Complete Hero Dataset (All 114 Heroes)</h2>
+                <div style="margin-bottom: 15px;">
+                    <input type="text" id="searchBox" placeholder="Search heroes by name, role, or lane..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+                </div>
+                <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
+                    <table id="fullDataTable">
+                        <thead style="position: sticky; top: 0; z-index: 10;">
+                            <tr>
+                                <th>#</th>
+                                <th onclick="sortTable(1)" style="cursor: pointer;">Hero ▼</th>
+                                <th onclick="sortTable(2)" style="cursor: pointer;">Role ▼</th>
+                                <th onclick="sortTable(3)" style="cursor: pointer;">Lane ▼</th>
+                                <th onclick="sortTable(4)" style="cursor: pointer;">HP ▼</th>
+                                <th onclick="sortTable(5)" style="cursor: pointer;">Speed ▼</th>
+                                <th onclick="sortTable(6)" style="cursor: pointer;">Wins ▼</th>
+                                <th onclick="sortTable(7)" style="cursor: pointer;">Loss ▼</th>
+                                <th onclick="sortTable(8)" style="cursor: pointer;">Win Rate ▼</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fullTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <div id="hypothesis" class="tab-content">
@@ -530,7 +555,7 @@
             }
         });
 
-        // Populate table
+        // Populate top 10 table
         const tableBody = document.getElementById('tableBody');
         topHeroes.forEach((hero, i) => {
             const row = `
@@ -545,6 +570,69 @@
             `;
             tableBody.innerHTML += row;
         });
+
+        // Populate full dataset table
+        function populateFullTable(heroList = heroes) {
+            const fullTableBody = document.getElementById('fullTableBody');
+            fullTableBody.innerHTML = '';
+            heroList.forEach((hero, i) => {
+                const winRateColor = hero.winRate > 51 ? '#10b981' : hero.winRate < 49 ? '#ef4444' : '#667eea';
+                const row = `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td><strong>${hero.name}</strong></td>
+                        <td><span style="background: #e0e7ff; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem;">${hero.role}</span></td>
+                        <td>${hero.lane}</td>
+                        <td>${hero.hp}</td>
+                        <td>${hero.movSpeed}</td>
+                        <td>${hero.wins}</td>
+                        <td>${hero.loss}</td>
+                        <td style="color: ${winRateColor}; font-weight: bold;">${hero.winRate.toFixed(2)}%</td>
+                    </tr>
+                `;
+                fullTableBody.innerHTML += row;
+            });
+        }
+
+        populateFullTable();
+
+        // Search functionality
+        document.getElementById('searchBox').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = heroes.filter(hero => 
+                hero.name.toLowerCase().includes(searchTerm) ||
+                hero.role.toLowerCase().includes(searchTerm) ||
+                hero.lane.toLowerCase().includes(searchTerm)
+            );
+            populateFullTable(filtered);
+        });
+
+        // Sort table functionality
+        let sortDirection = 1;
+        function sortTable(columnIndex) {
+            const sortedHeroes = [...heroes].sort((a, b) => {
+                let aVal, bVal;
+                switch(columnIndex) {
+                    case 1: aVal = a.name; bVal = b.name; break;
+                    case 2: aVal = a.role; bVal = b.role; break;
+                    case 3: aVal = a.lane; bVal = b.lane; break;
+                    case 4: aVal = a.hp; bVal = b.hp; break;
+                    case 5: aVal = a.movSpeed; bVal = b.movSpeed; break;
+                    case 6: aVal = a.wins; bVal = b.wins; break;
+                    case 7: aVal = a.loss; bVal = b.loss; break;
+                    case 8: aVal = a.winRate; bVal = b.winRate; break;
+                    default: return 0;
+                }
+                
+                if (typeof aVal === 'string') {
+                    return sortDirection * aVal.localeCompare(bVal);
+                }
+                return sortDirection * (aVal - bVal);
+            });
+            
+            sortDirection *= -1;
+            populateFullTable(sortedHeroes);
+        }
     </script>
 </body>
 </html>
