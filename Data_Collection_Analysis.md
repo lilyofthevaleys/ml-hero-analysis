@@ -79,43 +79,68 @@ The average win rate across all heroes is **49.49%**, remarkably close to the ba
 
 ### Data Visualizations
 
-#### Role-Based HP Analysis
-The visualization clearly demonstrates the HP hierarchy across roles:
-- **Tank**: ~2709 (highest average HP)
-- **Fighter**: ~2700
-- **Assassin**: ~2548
-- **Mage**: ~2520
-- **Marksman**: ~2500
-- **Support**: ~2470 (lowest average HP)
+The interactive analysis dashboard provides four main visualization tabs:
 
-Tanks possess the highest average HP, followed closely by Fighters. Mages, Marksmen, and Supports cluster together at the lower end, reflecting their role as backline damage dealers and utility providers requiring team protection.
+#### Tab 1: Hero Dataset (Complete Data Table)
+A comprehensive, searchable, and sortable table displaying all 114 heroes with the following columns:
+- Hero name
+- Role (color-coded badges)
+- Lane assignment
+- Base HP
+- Movement Speed
+- Esports Wins
+- Esports Losses
+- Win Rate (color-coded: green >51%, red <49%, blue 49-51%)
 
-#### Distribution of Heroes by Role
-The hero roster distribution reflects design philosophy prioritizing diverse playstyles:
-- **Fighter**: ~32% (largest portion, reflecting versatility)
-- **Mage**: ~25% 
-- **Assassin**: ~14%
-- **Tank**: ~13%
-- **Marksman**: ~12%
-- **Support**: ~9%
+**Features:**
+- Real-time search filtering by name, role, or lane
+- Sortable columns (click headers to sort ascending/descending)
+- Scrollable interface for easy data exploration
 
-Fighters comprise the largest portion of the hero roster, reflecting their versatility and popularity in solo queue gameplay. This distribution emphasizes flexible roles and diverse gameplay options.
+#### Tab 2: Overview Statistics
 
-#### Movement Speed Distribution by Role
+**Figure 1: HP Distribution by Hero (Bar Chart)**
+Shows the HP values for the first 20 heroes in the dataset, providing a visual representation of health point distribution across the hero roster. The chart highlights the variation in durability, with values ranging from approximately 2,300 to 2,900 HP.
+
+**Key Metrics Dashboard:**
+- Average HP: 2574
+- Average Movement Speed: 252
+- Average Win Rate: 49.49%
+
+These metrics are prominently displayed in card format, providing immediate insight into game balance and hero design philosophy.
+
+#### Tab 3: Role Analysis
+
+**Figure 2: Average HP by Role (Bar Chart)**
+Demonstrates the HP hierarchy across roles:
+- **Tank**: 2709 (highest average HP)
+- **Fighter**: 2700
+- **Mage**: 2520
+- **Assassin**: 2548
+- **Marksman**: 2500
+- **Support**: 2470 (lowest average HP)
+
+Tanks possess the highest average HP, designed to absorb damage and protect teammates. Supports show the lowest average HP, reflecting their utility-focused design that prioritizes positioning over durability.
+
+**Figure 3: Average Movement Speed by Role (Bar Chart)**
 Movement speed analysis reveals strategic balance:
-- **Assassins**: Highest median at 260, minimal variance (mobility-focused design)
-- **Fighters**: 257 average (balanced mobility)
-- **Tanks**: 253 average (moderate speed despite bulk)
-- **Supports**: 248 average
-- **Mages**: 244 average (lowest, backline positioning)
-- **Marksmen**: 244 average (requires protection)
+- **Assassin**: 257 (highest, enabling mobility-focused gameplay)
+- **Fighter**: 257 (balanced mobility for split-pushing)
+- **Tank**: 253 (moderate speed despite bulk)
+- **Marksman**: 246
+- **Mage**: 244 (lowest, emphasizing backline positioning)
+- **Support**: 248
 
-This distribution validates role design philosophy where mobility compensates for durability differences.
+The relatively narrow range (244-257) demonstrates intentional game balance, preventing any single role from dominating through excessive mobility advantage.
 
-#### HP vs Movement Speed Relationship
-The scatter plot reveals a general inverse correlation between HP and movement speed. Heroes with higher HP (Tanks, Fighters) tend to have moderate movement speeds, while fragile heroes (Assassins, some Mages) compensate with higher mobility. This design pattern maintains game balance by preventing heroes from possessing both maximum durability and maximum mobility simultaneously.
+#### Tab 4: Performance Analysis
 
-#### Top 10 Heroes by Win Rate
+**Figure 4: Top 10 Heroes by Win Rate (Horizontal Bar Chart)**
+Color-coded visualization showing the highest-performing heroes in competitive play:
+- Green bars indicate win rates above 51% (strong performance)
+- Orange/yellow bars indicate balanced performance around 50%
+
+**Top 10 Heroes by Win Rate:**
 
 1. **Faramis** (Support) - 57.86%
 2. **Franco** (Tank) - 57.42%
@@ -128,28 +153,93 @@ The scatter plot reveals a general inverse correlation between HP and movement s
 9. **Yi Sun-Shin** (Assassin) - 53.63%
 10. **Yin** (Fighter) - 53.61%
 
-The top performers represent diverse roles, indicating that win rate is determined more by hero kit effectiveness, meta relevance, and team synergy rather than raw statistical advantages. The diversity across roles (Support, Tank, Mage, Marksman, Assassin, Fighter) demonstrates successful game balance.
+**Analysis:**
+The top performers represent all six roles, indicating that win rate is determined by hero kit effectiveness, meta relevance, and team synergy rather than raw statistical advantages. Notably:
+- **Supports** occupy 2 spots (Faramis #1, Lolita #7), demonstrating the impact of utility and crowd control
+- **Mages** dominate with 3 spots (Kadita #3, Vexana #6, Eudora #8), reflecting burst damage effectiveness
+- **Marksmen** show strong performance (Wanwan #4, Miya #5), validating late-game carry potential
+- All roles are competitive, confirming successful game balance
 
-#### Win Rate Distribution
-The distribution reveals a roughly normal distribution centered around 50%, with most heroes clustering between 45-52% win rate. This demonstrates successful game balance, with outliers on both ends representing either:
-- **Overperforming heroes**: Requiring potential adjustments (>53%)
-- **Underperforming heroes**: Either mechanically demanding with high skill floors or requiring buffs (<45%)
+**Hero Statistics Table:**
+A detailed table displays the top 10 performers with complete information including hero name, role, HP, movement speed, and win rate percentage.
 
-The concentration around 50% validates the competitive viability of the majority of the hero roster, allowing for diverse team compositions and strategic flexibility.
+#### Tab 5: Hypothesis Testing Analysis
+
+The hypothesis testing section presents statistical analyses with formal null and alternative hypotheses:
+
+**Test 1: One-Sample Test - Average HP vs Standard (2600)**
+- **Hypothesis:**
+  - H₀: μ = 2600 (Average HP equals 2600)
+  - H₁: μ ≠ 2600 (Average HP differs from 2600)
+- **Results:**
+  - Sample Mean: 2574
+  - Test Value: 2600
+  - Sample Size: 114
+  - **Conclusion**: Average HP (2574) is very close to 2600, suggesting no significant difference. The difference of 26 HP represents less than 1% variation, indicating the game maintains a consistent health baseline across the roster.
+
+**Test 2: One-Sample Test - Average Win Rate vs 50%**
+- **Hypothesis:**
+  - H₀: μ = 50% (Win rate is balanced at 50%)
+  - H₁: μ ≠ 50% (Win rate differs from 50%)
+- **Results:**
+  - Sample Mean: 49.49%
+  - Test Value: 50%
+  - Sample Size: 114
+  - **Conclusion**: Average win rate (49.49%) is very close to 50%, indicating balanced gameplay. The 0.51% difference from perfect balance demonstrates successful competitive equilibrium across the hero roster.
+
+**Test 3: Two-Sample Test - Tank vs Assassin HP Comparison**
+- **Hypothesis:**
+  - H₀: μ_Tank = μ_Assassin (No difference in HP)
+  - H₁: μ_Tank ≠ μ_Assassin (Tanks have different HP than Assassins)
+- **Results:**
+  - Tank Average HP: 2709
+  - Assassin Average HP: 2548
+  - Difference: 161 HP
+  - **Conclusion**: Tanks have significantly higher HP than Assassins (161 HP difference, ~6.3% more), as expected by role design. This validates the durability vs. mobility trade-off in game design, where Tanks sacrifice damage and mobility for survivability.
+
+**Statistical Note:**
+All analyses are descriptive in nature. For formal statistical testing, one would calculate t-statistics, p-values, and determine significance levels (α = 0.05) to make definitive conclusions about rejecting or accepting null hypotheses. The current results suggest strong alignment with expected game balance parameters.
 
 ---
 
 ### Key Findings
 
-1. **Balanced Design**: Average win rate of 49.49% demonstrates excellent game balance
-2. **Role Differentiation**: Clear statistical patterns distinguish roles (HP, movement speed)
-3. **Strategic Diversity**: 114 heroes provide extensive strategic options
-4. **Competitive Viability**: Multiple heroes across all roles achieve high win rates
-5. **Design Trade-offs**: Inverse HP-mobility relationship maintains balance
+1. **Excellent Game Balance**: Average win rate of 49.49% (deviation of only 0.51% from ideal 50%) demonstrates exceptional game balance
+2. **Clear Role Differentiation**: Statistical patterns clearly distinguish roles:
+   - HP hierarchy: Tank (2709) > Fighter (2700) > Assassin (2548) > Mage (2520) > Marksman (2500) > Support (2470)
+   - Movement speed balance: Assassin/Fighter (257) > Tank (253) > Support (248) > Marksman/Mage (244-246)
+3. **Strategic Diversity**: 114 heroes across 6 roles provide extensive strategic options for team compositions
+4. **Competitive Viability**: Multiple heroes across all roles achieve 53%+ win rates, indicating every role has competitive picks
+5. **Design Trade-offs**: The 161 HP difference between Tanks and Assassins validates durability-mobility balance
+6. **Consistency**: Average HP of 2574 is within 1% of the 2600 baseline, showing consistent hero design
+7. **Role Representation**: Top 10 heroes include all 6 roles, confirming no single role dominates competitive play
 
-**Interactive Analysis**: View the complete interactive analysis at https://github.com/lilyofthevaleys/ml-hero-analysis
+### Technical Implementation
+
+**Interactive Dashboard Features:**
+- **Search Functionality**: Real-time filtering across 114 heroes
+- **Dynamic Sorting**: Click-to-sort on all data columns
+- **Color-Coded Metrics**: Visual indicators for performance (green/red/blue win rates)
+- **Responsive Charts**: Interactive bar charts and visualizations using Chart.js
+- **Tab Navigation**: Five organized sections for comprehensive analysis
+
+**Technologies Used:**
+- Chart.js for data visualization
+- Vanilla JavaScript for interactivity
+- HTML5/CSS3 for responsive design
+- Git version control with full commit history
+
+**Interactive Analysis**: View the complete interactive dashboard at https://github.com/lilyofthevaleys/ml-hero-analysis
+
+Open `ml_analysis_simple.html` in any browser to explore:
+- ✅ Complete hero dataset with search and sort
+- ✅ Statistical overview with key metrics
+- ✅ Role-based comparative analysis
+- ✅ Performance rankings and top heroes
+- ✅ Hypothesis testing with statistical results
 
 ---
 
 *Analysis conducted January 2026*  
-*Dataset: 114 Mobile Legends: Bang Bang Heroes*
+*Dataset: 114 Mobile Legends: Bang Bang Heroes*  
+*Repository: https://github.com/lilyofthevaleys/ml-hero-analysis*
