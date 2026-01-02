@@ -670,6 +670,9 @@
                         for offensive capabilities. This deliberate design pattern ensures that glass cannon heroes remain vulnerable 
                         to focused attacks, maintaining strategic depth through positioning requirements and protection dependencies.
                     </p>
+                    <div style="margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+                        <canvas id="reportHPChart" style="max-height: 350px;"></canvas>
+                    </div>
 
                     <p><strong>Figure 2: Average Movement Speed by Role</strong></p>
                     <div class="highlight-box">
@@ -706,6 +709,9 @@
                         mobility disparities that could render slower heroes unviable. This narrow distribution ensures that 
                         positioning skill and map awareness remain more impactful than base movement speed statistics.
                     </p>
+                    <div style="margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+                        <canvas id="reportSpeedChart" style="max-height: 350px;"></canvas>
+                    </div>
 
                     <p><strong>Figure 3: HP vs Movement Speed Scatter Plot</strong></p>
                     <p>
@@ -726,6 +732,9 @@
                         reduced damage output or limited crowd control capabilities, maintaining overall balance through holistic 
                         kit assessment rather than pure statistical distributions.
                     </p>
+                    <div style="margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+                        <canvas id="reportScatterChart" style="max-height: 400px;"></canvas>
+                    </div>
 
                     <p><strong>Figure 4: Top 10 Heroes by Win Rate</strong></p>
                     <p style="text-align: center; font-weight: bold; margin: 20px 0;">Table 2: Top Performing Heroes</p>
@@ -863,6 +872,9 @@
                         supports diverse team compositions and strategic flexibility, as players can select heroes based on 
                         personal preference and strategic requirements rather than being forced toward objectively superior choices.
                     </p>
+                    <div style="margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+                        <canvas id="reportWinRateHistogram" style="max-height: 350px;"></canvas>
+                    </div>
 
                     <p><strong>Figure 6: Distribution of Heroes by Role (Pie Chart)</strong></p>
                     <div class="highlight-box">
@@ -892,6 +904,9 @@
                         and team utility that cannot be quantified through base statistics alone. The balanced distribution across 
                         roles ensures that each position offers sufficient variety while maintaining distinct gameplay identities.
                     </p>
+                    <div style="margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+                        <canvas id="reportRolePieChart" style="max-height: 400px;"></canvas>
+                    </div>
                 </div>
                     
                     <p><strong>Test 1: One-Sample t-test - Average HP vs. 2600</strong></p>
@@ -1381,6 +1396,184 @@
             sortDirection *= -1;
             populateFullTable(sortedHeroes);
         }
+
+        // ===== REPORT TAB CHARTS =====
+        
+        // Figure 1: Average HP by Role
+        new Chart(document.getElementById('reportHPChart'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(roleStats),
+                datasets: [{
+                    label: 'Average HP',
+                    data: Object.values(roleStats).map(r => r.avgHp),
+                    backgroundColor: '#8b5cf6'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Figure 1: Average Health Points by Role',
+                        font: { size: 16, weight: 'bold' }
+                    },
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 2400,
+                        title: { display: true, text: 'HP' }
+                    }
+                }
+            }
+        });
+
+        // Figure 2: Average Speed by Role
+        new Chart(document.getElementById('reportSpeedChart'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(roleStats),
+                datasets: [{
+                    label: 'Average Speed',
+                    data: Object.values(roleStats).map(r => r.avgSpeed),
+                    backgroundColor: '#10b981'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Figure 2: Average Movement Speed by Role',
+                        font: { size: 16, weight: 'bold' }
+                    },
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 240,
+                        title: { display: true, text: 'Speed' }
+                    }
+                }
+            }
+        });
+
+        // Figure 3: HP vs Speed Scatter Plot
+        const roleColors = {
+            'Tank': '#ef4444',
+            'Fighter': '#f59e0b',
+            'Assassin': '#8b5cf6',
+            'Mage': '#3b82f6',
+            'Marksman': '#10b981',
+            'Support': '#ec4899'
+        };
+        
+        const scatterData = Object.keys(roleColors).map(role => ({
+            label: role,
+            data: heroes.filter(h => h.role === role).map(h => ({x: h.movSpeed, y: h.hp})),
+            backgroundColor: roleColors[role]
+        }));
+
+        new Chart(document.getElementById('reportScatterChart'), {
+            type: 'scatter',
+            data: { datasets: scatterData },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Figure 3: HP vs Movement Speed Correlation',
+                        font: { size: 16, weight: 'bold' }
+                    },
+                    legend: { position: 'right' }
+                },
+                scales: {
+                    x: { title: { display: true, text: 'Movement Speed' } },
+                    y: { title: { display: true, text: 'HP' } }
+                }
+            }
+        });
+
+        // Figure 5: Win Rate Distribution Histogram
+        const winRateBins = [40, 42, 44, 46, 48, 50, 52, 54, 56, 58];
+        const winRateCounts = new Array(winRateBins.length - 1).fill(0);
+        
+        heroes.forEach(hero => {
+            for (let i = 0; i < winRateBins.length - 1; i++) {
+                if (hero.winRate >= winRateBins[i] && hero.winRate < winRateBins[i + 1]) {
+                    winRateCounts[i]++;
+                    break;
+                }
+            }
+        });
+
+        new Chart(document.getElementById('reportWinRateHistogram'), {
+            type: 'bar',
+            data: {
+                labels: winRateBins.slice(0, -1).map((bin, i) => `${bin}-${winRateBins[i+1]}%`),
+                datasets: [{
+                    label: 'Number of Heroes',
+                    data: winRateCounts,
+                    backgroundColor: '#667eea'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Figure 5: Win Rate Distribution (Histogram)',
+                        font: { size: 16, weight: 'bold' }
+                    },
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Frequency' }
+                    },
+                    x: {
+                        title: { display: true, text: 'Win Rate Range' }
+                    }
+                }
+            }
+        });
+
+        // Figure 6: Role Distribution Pie Chart
+        const roleCounts = {};
+        heroes.forEach(h => {
+            roleCounts[h.role] = (roleCounts[h.role] || 0) + 1;
+        });
+
+        new Chart(document.getElementById('reportRolePieChart'), {
+            type: 'pie',
+            data: {
+                labels: Object.keys(roleCounts),
+                datasets: [{
+                    data: Object.values(roleCounts),
+                    backgroundColor: Object.keys(roleCounts).map(role => roleColors[role])
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Figure 6: Distribution of Heroes by Role',
+                        font: { size: 16, weight: 'bold' }
+                    },
+                    legend: { position: 'right' }
+                }
+            }
+        });
     </script>
 </body>
 </html>
