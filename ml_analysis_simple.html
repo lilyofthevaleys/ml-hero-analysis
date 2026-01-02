@@ -171,13 +171,41 @@
         </div>
 
         <div class="tabs">
-            <button class="tab-button active" onclick="showTab('overview')">📊 Overview</button>
+            <button class="tab-button active" onclick="showTab('dataset')">📋 Hero Dataset</button>
+            <button class="tab-button" onclick="showTab('overview')">📊 Overview</button>
             <button class="tab-button" onclick="showTab('roles')">👥 Role Analysis</button>
             <button class="tab-button" onclick="showTab('performance')">🏆 Performance</button>
             <button class="tab-button" onclick="showTab('hypothesis')">📈 Hypothesis Tests</button>
         </div>
 
-        <div id="overview" class="tab-content active">
+        <div id="dataset" class="tab-content active">
+            <div class="chart-container">
+                <h2>Complete Hero Dataset (All 114 Heroes)</h2>
+                <div style="margin-bottom: 15px;">
+                    <input type="text" id="searchBox" placeholder="Search heroes by name, role, or lane..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+                </div>
+                <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
+                    <table id="fullDataTable">
+                        <thead style="position: sticky; top: 0; z-index: 10;">
+                            <tr>
+                                <th>#</th>
+                                <th onclick="sortTable(1)" style="cursor: pointer;">Hero ▼</th>
+                                <th onclick="sortTable(2)" style="cursor: pointer;">Role ▼</th>
+                                <th onclick="sortTable(3)" style="cursor: pointer;">Lane ▼</th>
+                                <th onclick="sortTable(4)" style="cursor: pointer;">HP ▼</th>
+                                <th onclick="sortTable(5)" style="cursor: pointer;">Speed ▼</th>
+                                <th onclick="sortTable(6)" style="cursor: pointer;">Wins ▼</th>
+                                <th onclick="sortTable(7)" style="cursor: pointer;">Loss ▼</th>
+                                <th onclick="sortTable(8)" style="cursor: pointer;">Win Rate ▼</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fullTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="overview" class="tab-content">
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-label">Average HP</div>
@@ -240,31 +268,6 @@
                     </thead>
                     <tbody id="tableBody"></tbody>
                 </table>
-            </div>
-
-            <div class="chart-container">
-                <h2>Complete Hero Dataset (All 114 Heroes)</h2>
-                <div style="margin-bottom: 15px;">
-                    <input type="text" id="searchBox" placeholder="Search heroes by name, role, or lane..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
-                </div>
-                <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
-                    <table id="fullDataTable">
-                        <thead style="position: sticky; top: 0; z-index: 10;">
-                            <tr>
-                                <th>#</th>
-                                <th onclick="sortTable(1)" style="cursor: pointer;">Hero ▼</th>
-                                <th onclick="sortTable(2)" style="cursor: pointer;">Role ▼</th>
-                                <th onclick="sortTable(3)" style="cursor: pointer;">Lane ▼</th>
-                                <th onclick="sortTable(4)" style="cursor: pointer;">HP ▼</th>
-                                <th onclick="sortTable(5)" style="cursor: pointer;">Speed ▼</th>
-                                <th onclick="sortTable(6)" style="cursor: pointer;">Wins ▼</th>
-                                <th onclick="sortTable(7)" style="cursor: pointer;">Loss ▼</th>
-                                <th onclick="sortTable(8)" style="cursor: pointer;">Win Rate ▼</th>
-                            </tr>
-                        </thead>
-                        <tbody id="fullTableBody"></tbody>
-                    </table>
-                </div>
             </div>
         </div>
 
